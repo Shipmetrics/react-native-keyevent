@@ -1,9 +1,22 @@
-import { DeviceEventEmitter } from 'react-native';
+import {
+  DeviceEventEmitter,
+  NativeEventEmitter,
+  NativeModules,
+  Platform
+} from "react-native";
+const { RNKeyEvent } = NativeModules;
 
 class KeyEvent {
+  constructor() {
+    this.emitter =
+      Platform.OS === "ios"
+        ? new NativeEventEmitter(RNKeyEvent)
+        : DeviceEventEmitter;
+  }
+
   onKeyDownListener(cb) {
     this.removeKeyDownListener();
-    this.listenerKeyDown = DeviceEventEmitter.addListener('onKeyDown', cb);
+    this.listenerKeyDown = this.emitter.addListener("onKeyDown", cb);
   }
 
   removeKeyDownListener() {
@@ -15,7 +28,7 @@ class KeyEvent {
 
   onKeyUpListener(cb) {
     this.removeKeyUpListener();
-    this.listenerKeyUp = DeviceEventEmitter.addListener('onKeyUp', cb);
+    this.listenerKeyUp = this.emitter.addListener("onKeyUp", cb);
   }
 
   removeKeyUpListener() {
@@ -27,7 +40,7 @@ class KeyEvent {
 
   onKeyMultipleListener(cb) {
     this.removeKeyMultipleListener();
-    this.listenerKeyMultiple = DeviceEventEmitter.addListener('onKeyMultiple', cb);
+    this.listenerKeyMultiple = this.emitter.addListener("onKeyMultiple", cb);
   }
 
   removeKeyMultipleListener() {
