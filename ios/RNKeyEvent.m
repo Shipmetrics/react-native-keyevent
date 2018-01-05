@@ -27,7 +27,6 @@
         } downBlock:^{
             [weakSelf emitOnKeyUpEvent:[NSNumber numberWithInt:25]];
         }];
-        [self.volumeHandler startHandler:YES];
     }
     return self;
 }
@@ -41,10 +40,12 @@ RCT_EXPORT_MODULE();
 
 - (void)startObserving {
     self.hasListeners = YES;
+    [self.volumeHandler startHandler:YES];
 }
 
 - (void)stopObserving {
     self.hasListeners = NO;
+    [self.volumeHandler stopHandler];
 }
 
 + (BOOL)requiresMainQueueSetup
