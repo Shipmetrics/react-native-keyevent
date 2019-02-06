@@ -59,16 +59,19 @@ public class KeyEventModule extends ReactContextBaseJavaModule {
         WritableMap params = new WritableNativeMap();
         int action = keyEvent.getAction();
 
-        if (keyEvent.getAction() == KeyEvent.ACTION_MULTIPLE && keyCode == KeyEvent.KEYCODE_UNKNOWN) {
-            String chars = keyEvent.getCharacters();
-            if (chars != null) {
-                params.putString("characters", chars);
-            }
+        String chars = keyEvent.getCharacters();
+        if (chars != null) {
+            params.putString("characters", chars);
         }
 
         if (repeatCount != null) {
             params.putInt("repeatcount", repeatCount);
         }
+
+        int keyunicode = keyEvent.getUnicodeChar(keyEvent.getMetaState());
+        char character = (char) keyunicode;
+
+        params.putString("unicodeCharacter", String.valueOf(character));
 
         params.putInt("keyCode", keyCode);
         params.putInt("action", action);
